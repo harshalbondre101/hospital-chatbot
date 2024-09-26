@@ -1,4 +1,4 @@
-OPENAI_API_KEY: "sk-proj-BToIOeWl0Z9UCEPrZ3qsT3BlbkFJgQ30hfCHPB9lPMpvgnhW"
+OPENAI_API_KEY: "sk-proj-BToIOeWl0Z9UCEPrZ3qsT3BlbkFJgQ30hfCHPB9lPMpvgnh"
 chroma_db_path: "./chroma_db"
 collection_name: "ragchatdata"
 input_dir: "data"
