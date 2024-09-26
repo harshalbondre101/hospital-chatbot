@@ -1,0 +1,3 @@
+User: Can I book an appointment?
+Bot: Of course! I can assist you with that. May I have your name, please?
+

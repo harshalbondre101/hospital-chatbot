@@ -1,0 +1,3 @@
+User: where is the hospital located?
+Bot: I'm sorry for the inconvenience. As a chatbot, I don't have access to real-world information such as the physical location of the hospital. However, if you have any questions related to making, updating, or inquiring about appointments at the hospital, I'm here to assist you. How can I help you with our services today?
+

@@ -1,0 +1,37 @@
+User: hi, i need appointment 
+Bot: Sure, I'd be happy to assist you with scheduling an appointment. Could you please provide me with your full name?
+
+User: harshal bondre
+Bot: Thank you, Harshal. Now, could you please provide me with your email address? This will be used to send you the appointment confirmation and reminders.
+
+User: harshalbondre101@gmail.com
+Bot: Thank you, Harshal. Before we continue, could you please specify the date you'd like to book your appointment for? If you are unsure of the exact date, you could mention a preference like 'today', 'tomorrow', or any other weekday you have in mind.
+
+User: tommorow 
+Bot: Great, for tomorrow, which is September 27th, 2024, we have the following available slots (Timezone: Australia/Brisbane):
+
+- 10:00 AM - 11:00 AM
+- 11:00 AM - 12:00 PM
+- 12:00 PM - 1:00 PM
+- 1:00 PM - 2:00 PM
+- 2:00 PM - 3:00 PM
+- 3:00 PM - 4:00 PM
+- 4:00 PM - 5:00 PM
+- 5:00 PM - 6:00 PM
+
+Could you please let me know which time slot you would prefer for your appointment?
+
+User: 1 pm
+Bot: You've chosen the 1:00 PM - 2:00 PM slot for your appointment on September 27th, 2024. Before I proceed to book this for you, could you please confirm this is correct?
+
+User: yes
+Bot: Your appointment has been successfully booked! Here are the details:
+
+- **Name:** Harshal Bondre
+- **Email:** harshalbondre101@gmail.com
+- **Date:** September 27, 2024
+- **Time:** 1:00 PM - 2:00 PM
+- **Timezone:** Australia/Brisbane
+
+A confirmation email has also been sent to you. If you have any further questions or need to make changes to your appointment, feel free to ask. I hope you have a great day!
+

@@ -1,0 +1,6 @@
+User: hello
+Bot: Hello! How can I assist you with our hospital services today?
+
+User: i need appointment
+Bot: Of course, I can help you with that. Let's start by getting some details. May I have your name, please?
+

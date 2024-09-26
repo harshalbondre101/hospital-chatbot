@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif; /* Base font for body */
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc; /* Light background for better contrast */
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
+            box-sizing: border-box;
+        }
+        #chat-container {
+            max-width: 600px;
+            margin: 20px auto; /* Center the container */
+            background: #ffffff; /* White background for chat */
+            border-radius: 15px; /* More rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Softer shadow */
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Allow the container to grow */
+            overflow: hidden; /* Prevent overflow */
+        }
+        h2 {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif; /* Rich font for headings */
+            font-weight: 600; /* Semi-bold */
+            color: #007bff; /* Primary color for the title */
+            margin-bottom: 20px;
+        }
+        #messages {
+            flex-grow: 1; /* Fill remaining space */
+            overflow-y: auto; /* Allow scrolling */
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9f9f9; /* Slightly darker gray */
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%; /* Prevents messages from being too wide */
+            word-wrap: break-word; /* Wraps long words */
+            font-size: 15px; /* Set a base font size for messages */
+        }
+        .user-message {
+            background-color: #cce5ff; /* Light blue for user messages */
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #ffeeba; /* Light yellow for bot messages */
+            align-self: flex-start;
+        }
+        #user-input {
+            display: flex;
+            margin-top: 10px;
+            padding: 5px; /* Padding for mobile */
+        }
+        #user-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #007bff; /* Blue border */
+            border-radius: 8px; /* Rounded corners */
+            font-size: 16px; /* Larger text for touch screens */
+            transition: border-color 0.3s; /* Smooth border color transition */
+        }
+        #user-input input:focus {
+            border-color: #0056b3; /* Darker blue on focus */
+            outline: none; /* Remove default outline */
+        }
+        #user-input button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            background-color: #007bff; /* Primary color */
+            color: white;
+            border: none;
+            border-radius: 8px; /* Rounded corners */
+            cursor: pointer;
+            font-size: 16px; /* Larger button for touch screens */
+            transition: background-color 0.3s; /* Smooth background color transition */
+            font-family: 'Montserrat', sans-serif; /* Rich font for buttons */
+            font-weight: 600; /* Semi-bold */
+        }
+        #user-input button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .loading {
+            font-style: italic;
+            color: #888;
+            text-align: center; /* Center loading message */
+        }
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .suggestion-button {
+            background-color: #e2e6ea; /* Light gray for suggestion buttons */
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif; /* Rich font for buttons */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+        .suggestion-button:hover {
+            background-color: #d6d9db; /* Darker gray on hover */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            #chat-container {
+                padding: 15px; /* Reduced padding on mobile */
+            }
+            #messages {
+                padding: 10px; /* Reduced padding on mobile */
+            }
+            .message {
+                max-width: 95%; /* Allow more width on smaller screens */
+            }
+            #user-input input {
+                font-size: 14px; /* Slightly smaller font size for mobile */
+            }
+            #user-input button {
+                font-size: 14px; /* Slightly smaller font size for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h2>Hospital Support Chatbot</h2>
+        <div id="messages"></div>
+        <div id="user-input">
+            <input type="text" id="userMessage" placeholder="Type your message here..." />
+            <button id="sendButton">Send</button>
+        </div>
+        <div class="suggestions" id="suggestionButtons">
+            <button class="suggestion-button" onclick="suggest('Can I book an appointment?')">Book Appointment</button>
+            <button class="suggestion-button" onclick="suggest('What are the hospital hours?')">Hospital Hours</button>
+            <button class="suggestion-button" onclick="suggest('Can you provide directions?')">Directions</button>
+            <button class="suggestion-button" onclick="suggest('What services do you offer?')">Services Offered</button>
+        </div>
+    </div>
+
+    <script>
+        let threadId = null;
+
+        async function startChat() {
+            const response = await fetch('/start');
+            const data = await response.json();
+            threadId = data.thread_id;
+
+            // Notify user that the chat has started
+            const welcomeMessage = document.createElement('div');
+            welcomeMessage.textContent = "Welcome to the Hospital Support Chatbot! How can I assist you today?";
+            welcomeMessage.className = "message bot-message";
+            document.getElementById('messages').appendChild(welcomeMessage);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;  // Auto-scroll
+        }
+
+        async function sendMessage() {
+            const userMessage = document.getElementById('userMessage').value;
+            if (!userMessage) return;
+
+            // Display user message
+            const messageElement = document.createElement('div');
+            messageElement.textContent = userMessage;
+            messageElement.className = "message user-message";
+            document.getElementById('messages').appendChild(messageElement);
+            document.getElementById('userMessage').value = '';
+
+            // Display loading message
+            const loadingElement = document.createElement('div');
+            loadingElement.textContent = "Bot is typing...";
+            loadingElement.className = "loading";
+            document.getElementById('messages').appendChild(loadingElement);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;  // Auto-scroll
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    thread_id: threadId,
+                    message: userMessage
+                })
+            });
+
+            const data = await response.json();
+            // Remove loading message
+            document.getElementById('messages').removeChild(loadingElement);
+
+            // Display bot response
+            const botMessageElement = document.createElement('div');
+            botMessageElement.textContent = data.response;
+            botMessageElement.className = "message bot-message";
+            document.getElementById('messages').appendChild(botMessageElement);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;  // Auto-scroll
+        }
+
+        function suggest(suggestion) {
+            document.getElementById('userMessage').value = suggestion; // Populate input with suggestion
+            sendMessage(); // Send the suggestion as a message
+            document.getElementById('suggestionButtons').style.display = 'none'; // Hide suggestions after use
+        }
+
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('userMessage').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Handle keyboard visibility changes
+        window.addEventListener('resize', () => {
+            const viewportHeight = window.innerHeight;
+            const chatContainer = document.getElementById('chat-container');
+            const inputBar = document.getElementById('user-input');
+            const messages = document.getElementById('messages');
+
+            if (document.activeElement === document.getElementById('userMessage')) {
+                // If the keyboard is open, adjust height
+                chatContainer.style.height = `${viewportHeight - inputBar.offsetHeight - 20}px`; // 20px for padding
+                messages.scrollTop = messages.scrollHeight; // Ensure messages are visible
+            } else {
+                // Reset height when keyboard is closed
+                chatContainer.style.height = 'auto';
+            }
+        });
+
+        // Start chat when the page loads
+        window.onload = startChat;
+    </script>
+</body>
+</html>

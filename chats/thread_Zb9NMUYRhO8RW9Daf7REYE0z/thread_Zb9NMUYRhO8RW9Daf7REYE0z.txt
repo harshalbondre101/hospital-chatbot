@@ -1,0 +1,9 @@
+User: hi
+Bot: Hello! How can I assist you with our hospital's services today?
+
+User: where is the hospital
+Bot: The hospital is located on Hills Rd in Cambridge with the postcode CB2 0QQ. How may I further assist you today?
+
+User: i need one appointment 
+Bot: Great, I can help you with that. Could you please provide me with your name?
+
