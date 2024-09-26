@@ -26,11 +26,6 @@ from llama_index.core import Settings
 # setting llm to gpt-4o
 #Settings.llm = OpenAI(temperature=0.2, model="gpt-4o", default_headers={"OpenAI-Beta": "assistants=v2"})
 
-import nest_asyncio
-
-# Apply the nest_asyncio patch
-nest_asyncio.apply()
-
 app = FastAPI()
 
 app.add_middleware(
