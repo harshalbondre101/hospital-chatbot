@@ -148,7 +148,11 @@ async def run_chatbot(user_thread_id):
     # Function to run an existing chatbot for a user
     with open("global_config.yaml", "r") as f:
         config = yaml.safe_load(f)
-        os.environ["OPENAI_API_KEY"] = config["OPENAI_API_KEY"]
+        #os.environ["OPENAI_API_KEY"] = config["OPENAI_API_KEY"]
+        # Retrieve OpenAI API key from environment variable
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        if not OPENAI_API_KEY:
+            raise ValueError("OpenAI API key not set in environment variables")
 
     db = chromadb.PersistentClient(config["chroma_db_path"])
     chroma_collection = db.get_or_create_collection(config["collection_name"])
